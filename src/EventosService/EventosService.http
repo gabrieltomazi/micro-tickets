@@ -1,6 +1,26 @@
-@EventosService_HostAddress = http://localhost:5197
+@EventosService_HostAddress = http://localhost:5001
 
-GET {{EventosService_HostAddress}}/weatherforecast/
+### Listar todos os eventos
+GET {{EventosService_HostAddress}}/api/eventos
+Accept: application/json
+
+###
+
+### Cadastrar novo evento
+POST {{EventosService_HostAddress}}/api/eventos
+Content-Type: application/json
+
+{
+  "nome": "Rock in Rio 2026",
+  "local": "Cidade do Rock - Rio de Janeiro",
+  "data": "2026-09-15T19:00:00Z",
+  "capacidadeMaxima": 50000
+}
+
+###
+
+### Buscar evento por ID
+GET {{EventosService_HostAddress}}/api/eventos/1
 Accept: application/json
 
 ###
