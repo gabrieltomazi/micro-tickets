@@ -1,4 +1,4 @@
-# TicketPass - Sistema de Gestão de Eventos e Ingressos
+# MicroTickets - Sistema de Gestão de Eventos e Ingressos
 
 > **Disciplina:** Engenharia de Software - Arquitetura de Software  
 > **Professor:** Eduardo Cizeski Meneghel  
