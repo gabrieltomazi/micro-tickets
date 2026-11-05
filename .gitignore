@@ -1,0 +1,17 @@
+# Configurações do Visual Studio e VS Code
+.vs/
+.vscode/
+
+# Compilação (.NET)
+[Bb]in/
+[Oo]bj/
+
+# Ficheiros de ambiente e utilizador
+*.user
+*.suo
+appsettings.Development.json
+
+# Bases de dados SQLite geradas localmente
+*.db
+*.db-shm
+*.db-wal

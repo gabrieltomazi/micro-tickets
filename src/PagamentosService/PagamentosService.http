@@ -1,0 +1,6 @@
+@PagamentosService_HostAddress = http://localhost:5062
+
+GET {{PagamentosService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
