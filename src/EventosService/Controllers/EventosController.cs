@@ -23,6 +23,11 @@ namespace EventosService.Controllers
             try
             {
                 var eventos = _servEvento.Listar();
+
+                if(eventos === null || !eventos.Any()){
+                    return NoContent();
+                }
+
                 return Ok(eventos);
             }
             catch (Exception ex)
