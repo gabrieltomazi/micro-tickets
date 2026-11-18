@@ -24,7 +24,9 @@ namespace EventosService.Controllers
             {
                 var eventos = _servEvento.Listar();
 
-                if(eventos === null || !eventos.Any()){
+                // verifica se a lista esta vazia ou nula para retornar 204 no content
+                if (eventos == null || !eventos.Any())
+                {
                     return NoContent();
                 }
 
