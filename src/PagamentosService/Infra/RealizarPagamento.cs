@@ -1,6 +1,5 @@
 namespace IngressosService.Infra
 {
-    // provedor estático de serviços seguindo o padrão do professor
     public static class GeradorDeServicos
     {
         public static ServiceProvider ServiceProvider { get; set; } = null!;
