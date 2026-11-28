@@ -1,8 +1,9 @@
-using PagamentosService.Models;
 using Microsoft.EntityFrameworkCore;
+using PagamentosService.Models;
 
 namespace PagamentosService
 {
+    // contexto de banco de dados para o microsserviço de pagamentos
     public class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
@@ -13,14 +14,14 @@ namespace PagamentosService
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Ingresso>(entity =>
+            // mapeamento da entidade pagamento
+            modelBuilder.Entity<Pagamento>(entity =>
             {
-                entity.HasKey(i => i.Id);
-                entity.Property(i => i.CodigoTicket).IsRequired();
-                entity.Property(i => i.Status)
-                    .HasConversion<string>()
-                    .IsRequired();
-                entity.Property(i => i.Preco).HasColumnType("TEXT");
+                entity.HasKey(p => p.Id);
+                entity.Property(p => p.IngressoId).IsRequired();
+                entity.Property(p => p.MetodoPagamento).IsRequired();
+                entity.Property(p => p.Status).IsRequired();
+                entity.Property(p => p.Valor).HasColumnType("TEXT");
             });
 
             base.OnModelCreating(modelBuilder);
