@@ -152,16 +152,80 @@ Conforme as diretrizes da avaliação, foram implementadas as seguintes integra�
 
 ## 4. Publicação e Links de Acesso
 
-| Microsserviço | Diretório | URL Render | Swagger UI |
+Todos os microsserviços estão publicados no Render e contam com documentação interativa via **Scalar / OpenAPI**
+
+| Microsserviço | Diretório | URL Render | Documentação Interativa |
 | :--- | :--- | :--- | :--- |
-| **Eventos-Service** | `/src/EventosService` | `à ser subido` | `/swagger` |
-| **Clientes-Service** | `/src/ClientesService` | `à ser subido` | `/swagger` |
-| **Ingressos-Service** | `/src/IngressosService` | `à ser subido` | `/swagger` |
-| **Pagamentos-Service** | `/src/PagamentosService` | `à ser subido` | `/swagger` |
+| **Eventos-Service** | `/src/EventosService` | `https://eventos-service-avyd.onrender.com` | `/scalar/v1` |
+| **Clientes-Service** | `/src/ClientesService` | `https://clientes-service-9w74.onrender.com` | `/scalar/v1` |
+| **Ingressos-Service** | `/src/IngressosService` | `https://ingressos-service.onrender.com` | `/scalar/v1` |
+| **Pagamentos-Service** | `/src/PagamentosService` | `https://pagamentos-service.onrender.com` | `/scalar/v1` |
 
 ---
 
-## 5. Integrantes da Equipe
+## 5. Guia de Teste de Ponta a Ponta (Fluxo do Sistema)
+
+Para demonstrar o ciclo de vida completo do sistema e as integrações síncronas entre os microsserviços, execute o seguinte roteiro diretamente pelas interfaces do Scalar:
+
+### Passo 1: Cadastrar um Evento (`Eventos-Service`)
+* **Endpoint:** `POST /api/eventos`
+* **Exemplo de Body:**
+  ```json
+  {
+    "nome": "Festival de Música SATC 2026",
+    "local": "Auditório Central",
+    "data": "2026-12-15T19:00:00Z",
+    "capacidadeMaxima": 500,
+    "ativo": true
+  }
+  ```
+* **Retorno:** `201 Created` informando o `id` gerado (ex: `1`).
+
+### Passo 2: Cadastrar um Cliente (`Clientes-Service`)
+* **Endpoint:** `POST /api/clientes`
+* **Exemplo de Body:**
+  ```json
+  {
+    "nome": "Antonio",
+    "email": "antonio@gmail.com",
+    "documento": "000.111.222-33"
+  }
+  ```
+* **Retorno:** `201 Created` informando o `id` cadastrado (ex: `1`).
+
+### Passo 3: Emitir a Reserva do Ingresso (`Ingressos-Service`)
+* **Endpoint:** `POST /api/ingressos`
+* **Integração Síncrona 1 e 2:** O `Ingressos-Service` consulta via HTTP o `Eventos-Service` (garantindo que o evento existe e está ativo) e o `Clientes-Service`.
+* **Exemplo de Body:**
+  ```json
+  {
+    "eventoId": 1,
+    "clienteId": 1,
+    "preco": 120.00
+  }
+  ```
+* **Retorno:** `201 Created` gerando um `id` em formato **`Guid`** (ex: `66c501f7-062b-493a-9ced-db8f654354df`), um código único (`codigoTicket`) e status inicial **`"Pendente"`**.
+
+### Passo 4: Realizar o Pagamento (`Pagamentos-Service`)
+* **Endpoint:** `POST /api/pagamentos`
+* **Integração Síncrona 3:** O `Pagamentos-Service` registra a transação e dispara uma requisição `PATCH /api/ingressos/{id}/confirmar` para o `Ingressos-Service`.
+* **Exemplo de Body:**
+  ```json
+  {
+    "ingressoId": "COLE_O_GUID_DO_PASSO_ANTERIOR_AQUI",
+    "valor": 120.00,
+    "metodoPagamento": "PIX"
+  }
+  ```
+* **Retorno:** `201 Created` com a transação aprovada.
+
+### Passo 5: Confirmar Atualização do Ingresso (`Ingressos-Service`)
+* **Endpoint:** `GET /api/ingressos/{id}` (consultando pelo Guid do ingresso).
+* **Retorno:** `200 OK` comprovando que o status do ingresso foi alterado automaticamente de **`"Pendente"`** para **`"Confirmado"`**.
+
+---
+
+## 6. Integrantes da Equipe
 * **Aluno 1** - Kaio Souza Cadorin
 * **Aluno 2** - Gustavo Olivo
 * **Aluno 3** - Gabriel Tomazi
